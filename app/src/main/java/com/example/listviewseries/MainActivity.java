@@ -16,8 +16,9 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity
 {
     EditText etA1;
-    EditText etQorD;
+    EditText etDifference;
     Switch sw;
+    int seriesType = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,31 +33,51 @@ public class MainActivity extends AppCompatActivity
             return insets;
         });
         etA1 = findViewById(R.id.etA1);
-        etQorD = findViewById(R.id.etQorD);
+        etDifference = findViewById(R.id.etDifference);
         sw = findViewById(R.id.sw);
+    }
+
+    public boolean isValidNum(String input)
+    {
+        return !((input.equals("")) ||
+                (input.equals("-")) ||
+                (input.equals(".")) ||
+                (input.equals("+")) ||
+                (input.equals("+.")) ||
+                (input.equals("-.")));
     }
 
     public void clickedSwitch(View view)
     {
         if (sw.isChecked())
-            etQorD.setHint("הכנס הפרש:");
+        {
+            etDifference.setHint("הכנס הפרש:");
+            seriesType = 1;
+        }
+
         else
-            etQorD.setHint("הכנס מכפיל:");
+        {
+            etDifference.setHint("הכנס מכפיל:");
+            seriesType = 0;
+        }
     }
 
 
     public void clickedNext(View view)
     {
-        if (( etA1.getText().toString().isEmpty() )
-                ||( etQorD.getText().toString().isEmpty()))
-            Toast.makeText(this, "illegal action! please insert numbers.", Toast.LENGTH_SHORT).show();
-        else
+        if (isValidNum(etA1.getText().toString())
+                && isValidNum(etDifference.getText().toString()))
         {
+            double a1 =  Double.parseDouble(etA1.getText().toString());
+            double difference = Double.parseDouble(etDifference.getText().toString());
             Intent intent = new Intent(this, Activity2.class);
-            intent.putExtra("etQorD", String.valueOf(etQorD));
-            intent.putExtra("etA1", String.valueOf(etA1));
+            intent.putExtra("difference", difference);
+            intent.putExtra("a1", a1);
+            intent.putExtra("seriesType", seriesType);
             startActivity(intent);
-
         }
+
+        else
+            Toast.makeText(this, "illegal action! please insert numbers.", Toast.LENGTH_SHORT).show();
     }
 }

@@ -76,40 +76,30 @@ public class Activity2 extends AppCompatActivity implements AdapterView.OnItemCl
 
     public static String differentView(double term)
     {
-        if (term % 1 == 0 &&
-                term < 10000 &&
-                term > -10000)
-            return String.valueOf((int) term);
-
-        if (term >= 10000 ||
-                term <= -10000)
+        if (term % 1 == 0 && Math.abs(term) < 10000)
         {
-            int exponent = 0;
-            double coefficient = term;
+            return String.valueOf((int) term);
+        }
 
-            while (Math.abs(coefficient) >= 10000)
-            {
-                coefficient /= 10;
-                exponent++;
-            }
-
-            return String.format("%d * 10^%d", (int) coefficient, exponent);
+        if (Math.abs(term) < 10000 && Math.abs(term) >= 0.001)
+        {
+            return String.format("%.3f", term);
         }
 
         int exponent = 0;
         double coefficient = term;
 
-        if ( Math.abs(term) >= 1 )
+        if (Math.abs(term) >= 1)
         {
-            while ( Math.abs(coefficient) >= 10 )
+            while (Math.abs(coefficient) >= 10)
             {
                 coefficient /= 10;
-                exponent ++;
+                exponent++;
             }
         }
         else
         {
-            while (Math.abs(coefficient) < 1)
+            while (Math.abs(coefficient) < 1 && coefficient != 0)
             {
                 coefficient *= 10;
                 exponent--;
@@ -122,17 +112,19 @@ public class Activity2 extends AppCompatActivity implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l)
     {
-        if ( seriesType == 0 )
-            seriesSum = (a1 * ( Math.pow( difference, pos + 1 ) - 1 )) / ( difference - 1 );
-
+        if (seriesType == 0)
+        {
+            seriesSum = (a1 * (Math.pow(difference, pos + 1) - 1)) / (difference - 1);
+        }
         else
-            seriesSum = ( ( pos +1 ) * ( a1 + seriesArry[ pos + 1 ] )) / 2;
-
-        tvSn.setText( differentView( seriesSum ));
-        tvN.setText( String.valueOf(pos +1 ));
+        {
+            seriesSum = ((pos + 1) * (a1 + seriesArry[pos])) / 2;
+        }
+        tvSn.setText(differentView(seriesSum));
+        tvN.setText(String.valueOf(pos + 1));
     }
 
-    public void clickedBack (View view)
+    public void clickedBack(View view)
     {
         finish();
     }
